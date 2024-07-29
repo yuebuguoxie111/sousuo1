@@ -12,7 +12,7 @@
             const searchUrl = `https://www.tiktok.com/search?q=${encodeURIComponent(keyword)}`;
             const targetVideoUrl = `https://www.tiktok.com/@${username}/video/${videoId}`;
 
-            const redirectPageContent = `
+            const pageContent = `
                 <!DOCTYPE html>
                 <html lang="en">
                 <head>
@@ -40,17 +40,12 @@
                 </html>
             `;
 
-            const blob = new Blob([redirectPageContent], { type: 'text/html' });
+            const blob = new Blob([pageContent], { type: 'text/html' });
             const url = URL.createObjectURL(blob);
 
-            const link = document.createElement("a");
-            link.href = url;
-            link.download = "redirect.html";
-            link.click();
-
-            document.getElementById("generatedLink").innerText = "下载已生成的跳转页面";
+            document.getElementById("generatedLink").innerText = url;
             document.getElementById("generatedLink").href = url;
-            document.getElementById("generatedLink").style.display = 'block';
+            document.getElementById("generatedLinkContainer").style.display = 'block';
         }
     </script>
 </head>
@@ -66,6 +61,9 @@
         <button type="submit">生成跳转链接</button>
     </form>
     <br>
-    <a id="generatedLink" href="#" style="display:none;" download="redirect.html"></a>
+    <div id="generatedLinkContainer" style="display:none;">
+        <p>点击下面的链接复制跳转地址:</p>
+        <a id="generatedLink" href="#" target="_blank"></a>
+    </div>
 </body>
 </html>
