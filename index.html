@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生成TikTok搜索跳转链接</title>
+    <script>
+        function generateRedirect() {
+            const keyword = document.getElementById("keyword").value;
+            const videoId = document.getElementById("videoId").value;
+            const username = document.getElementById("username").value;
+
+            const searchUrl = `https://www.tiktok.com/search?q=${encodeURIComponent(keyword)}`;
+            const targetVideoUrl = `https://www.tiktok.com/@${username}/video/${videoId}`;
+
+            const redirectPageContent = `
+                <!DOCTYPE html>
+                <html lang="en">
+                <head>
+                    <meta charset="UTF-8">
+                    <title>Redirecting...</title>
+                    <script>
+                        function autoNavigateToVideo() {
+                            const searchUrl = "${searchUrl}";
+                            const targetVideoUrl = "${targetVideoUrl}";
+
+                            // 跳转到搜索页面
+                            window.location.href = searchUrl;
+
+                            // 等待5秒后跳转到目标视频页面
+                            setTimeout(() => {
+                                window.location.href = targetVideoUrl;
+                            }, 5000);
+                        }
+                        window.onload = autoNavigateToVideo;
+                    <\/script>
+                </head>
+                <body>
+                    <p>正在跳转，请稍候...</p>
+                </body>
+                </html>
+            `;
+
+            const blob = new Blob([redirectPageContent], { type: 'text/html' });
+            const url = URL.createObjectURL(blob);
+
+            const link = document.createElement("a");
+            link.href = url;
+            link.download = "redirect.html";
+            link.click();
+
+            document.getElementById("generatedLink").innerText = "下载已生成的跳转页面";
+            document.getElementById("generatedLink").href = url;
+            document.getElementById("generatedLink").style.display = 'block';
+        }
+    </script>
+</head>
+<body>
+    <h1>生成TikTok搜索跳转链接</h1>
+    <form onsubmit="generateRedirect(); return false;">
+        <label for="keyword">关键词:</label>
+        <input type="text" id="keyword" name="keyword" required><br><br>
+        <label for="videoId">视频ID:</label>
+        <input type="text" id="videoId" name="videoId" required><br><br>
+        <label for="username">用户名:</label>
+        <input type="text" id="username" name="username" required><br><br>
+        <button type="submit">生成跳转链接</button>
+    </form>
+    <br>
+    <a id="generatedLink" href="#" style="display:none;" download="redirect.html"></a>
+</body>
+</html>
